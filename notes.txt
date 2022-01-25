@@ -1,0 +1,7 @@
+Yahtzee notes
+
+- App renders <Game />
+	- Game contains the Dice and ScoreTable
+		- Dice renders 5 Die components
+		- ScoreTable renders two groups of RuleRow components
+			- RuleRow
