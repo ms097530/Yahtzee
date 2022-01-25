@@ -39,6 +39,7 @@ class Game extends Component
       diceToRoll: Array(NUM_DICE).fill(true),
       turnsLeft: MAX_TURNS
     };
+
     this.roll = this.roll.bind(this);
     this.doScore = this.doScore.bind(this);
     this.toggleLocked = this.toggleLocked.bind(this);
@@ -162,7 +163,7 @@ class Game extends Component
           </section>
         </header>
         <ScoreTable doScore={this.doScore} scores={this.state.scores} />
-        <div class="Game-footer">
+        <div className="Game-footer">
           <p>Total Score: {total}</p>
           <p>Turns Left: {this.state.turnsLeft}</p>
         </div>
