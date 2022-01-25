@@ -5,6 +5,7 @@ import "./Game.css";
 
 const NUM_DICE = 5;
 const NUM_ROLLS = 3;
+const MAX_TURNS = 13;
 
 class Game extends Component
 {
@@ -35,11 +36,13 @@ class Game extends Component
         chance: undefined
       },
       isRolling: false,
-      diceToRoll: Array(NUM_DICE).fill(true)
+      diceToRoll: Array(NUM_DICE).fill(true),
+      turnsLeft: MAX_TURNS
     };
     this.roll = this.roll.bind(this);
     this.doScore = this.doScore.bind(this);
     this.toggleLocked = this.toggleLocked.bind(this);
+    this.restart = this.restart.bind(this);
   }
 
   roll(evt)
@@ -88,11 +91,42 @@ class Game extends Component
       this.setState(st => ({
         scores: { ...st.scores, [rulename]: ruleFn(this.state.dice) },
         rollsLeft: NUM_ROLLS,
-        locked: Array(NUM_DICE).fill(false),
-        diceToRoll: Array(NUM_DICE).fill(true)
+        locked: st.turnsLeft === 1 ? Array(NUM_DICE).fill(true) : Array(NUM_DICE).fill(false),
+        diceToRoll: Array(NUM_DICE).fill(true),
+        turnsLeft: st.turnsLeft - 1
       }));
       this.roll();
     }
+  }
+
+  restart(e)
+  {
+    this.setState({
+      dice: Array.from({ length: NUM_DICE }).map(val => Math.ceil(Math.random() * 6)),
+      // array that tracks which dice are and aren't locked between rolls
+      locked: Array(NUM_DICE).fill(false),
+      // counter for rolls left in a given round
+      rollsLeft: NUM_ROLLS - 1,
+      scores:
+      {
+        ones: undefined,
+        twos: undefined,
+        threes: undefined,
+        fours: undefined,
+        fives: undefined,
+        sixes: undefined,
+        threeOfKind: undefined,
+        fourOfKind: undefined,
+        fullHouse: undefined,
+        smallStraight: undefined,
+        largeStraight: undefined,
+        yahtzee: undefined,
+        chance: undefined
+      },
+      isRolling: false,
+      diceToRoll: Array(NUM_DICE).fill(true),
+      turnsLeft: MAX_TURNS
+    });
   }
 
   render()
@@ -128,7 +162,11 @@ class Game extends Component
           </section>
         </header>
         <ScoreTable doScore={this.doScore} scores={this.state.scores} />
-        <p>Total Score: {total}</p>
+        <div class="Game-footer">
+          <p>Total Score: {total}</p>
+          <p>Turns Left: {this.state.turnsLeft}</p>
+        </div>
+        <button className="Game-restart" onClick={this.restart}>Restart</button>
       </div>
     );
   }
