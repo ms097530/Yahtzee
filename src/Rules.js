@@ -100,9 +100,9 @@ class SmallStraight extends Rule
     })
 
     // small straight must be 4 different dice in a row or a large straight
-    return d.size === 5 && (max - min === 4 || max - min === 5)
+    return d.size === 5
       ? this.score
-      : d.size === 4 && max - min === 3 ? this.score : 0;
+      : (d.size === 4 && max - min === 3) ? this.score : 0;
   }
   description = "If 4+ values in a row, score 30 pts (else 0)";
 }
