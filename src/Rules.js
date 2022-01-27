@@ -26,7 +26,9 @@ class Rule
   {
     // frequencies of dice values
     const freqs = new Map();
+    // maps dice values to their frequency in key-value pair
     for (let d of dice) freqs.set(d, (freqs.get(d) || 0) + 1);
+    // array of results, i.e. in array of five different values [1,1,1,1,1] or for a full house [2,3]
     return Array.from(freqs.values());
   }
 
@@ -72,10 +74,12 @@ class FullHouse extends Rule
 {
   evalRoll = dice =>
   {
-    let diceSorted = dice.sort();
-    let countOne = dice.filter(die => die === diceSorted[0]).length;
-    let countTwo = dice.filter(die => die === diceSorted[dice.length - 1]).length;
-    return countOne === 3 && countTwo === 2 ? this.score : countOne === 2 && countTwo === 3 ? this.score : 0;
+    // let diceSorted = dice.sort();
+    // let countOne = dice.filter(die => die === diceSorted[0]).length;
+    // let countTwo = dice.filter(die => die === diceSorted[dice.length - 1]).length;
+    // return countOne === 3 && countTwo === 2 ? this.score : countOne === 2 && countTwo === 3 ? this.score : 0;
+    const repeatValCounts = this.freq(dice);
+    return repeatValCounts.includes(2) && repeatValCounts.includes(3) ? this.score : 0;
   }
   description = "If 3 of a kind and 2 of another kind, score 25 pts (else 0)";
 
